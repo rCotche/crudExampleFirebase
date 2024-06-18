@@ -1,4 +1,7 @@
+import 'package:crud_example_firebase/service/database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:random_string/random_string.dart';
 
 class Employee extends StatefulWidget {
   const Employee({super.key});
@@ -8,6 +11,19 @@ class Employee extends StatefulWidget {
 }
 
 class _EmployeeState extends State<Employee> {
+  //
+  TextEditingController nameController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    ageController.dispose();
+    locationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +57,7 @@ class _EmployeeState extends State<Employee> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //name
             const Text(
               'Name',
               style: TextStyle(
@@ -58,13 +75,16 @@ class _EmployeeState extends State<Employee> {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const TextField(
-                decoration: InputDecoration(border: InputBorder.none),
+              child: TextField(
+                controller: nameController,
+                decoration: const InputDecoration(border: InputBorder.none),
               ),
             ),
             const SizedBox(
               height: 20,
             ),
+
+            //age
             const Text(
               'Age',
               style: TextStyle(
@@ -82,13 +102,16 @@ class _EmployeeState extends State<Employee> {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const TextField(
-                decoration: InputDecoration(border: InputBorder.none),
+              child: TextField(
+                controller: ageController,
+                decoration: const InputDecoration(border: InputBorder.none),
               ),
             ),
             const SizedBox(
               height: 20,
             ),
+
+            //location
             const Text(
               'Location',
               style: TextStyle(
@@ -106,16 +129,51 @@ class _EmployeeState extends State<Employee> {
                 border: Border.all(),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const TextField(
-                decoration: InputDecoration(border: InputBorder.none),
+              child: TextField(
+                controller: locationController,
+                decoration: const InputDecoration(border: InputBorder.none),
               ),
             ),
             const SizedBox(
               height: 20,
             ),
+
+            //button add
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  //random_string package
+                  //generate id
+                  String Id = randomAlphaNumeric(10);
+
+                  //
+                  Map<String, dynamic> employeeInfoMap = {
+                    "Id": Id,
+                    "Name": nameController.text,
+                    "Age": ageController.text,
+                    "Location": locationController.text,
+                  };
+
+                  //call the class directly
+                  //async/ await parce qu"on interagit avec firebase
+                  //server distant
+
+                  //function then fournit par dart
+                  //Register callbacks to be called when this future completes.
+                  //quand ma fonction addEmployeeDetails est terminé "then what"
+                  await DatabaseMethods()
+                      .addEmployeeDetails(employeeInfoMap, Id)
+                      .then((value) {
+                    Fluttertoast.showToast(
+                        msg: "Success",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  });
+                },
                 child: const Text(
                   'Add',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

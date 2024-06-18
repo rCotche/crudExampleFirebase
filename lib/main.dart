@@ -1,7 +1,18 @@
 import 'package:crud_example_firebase/pages/home.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  //WidgetsFlutterBinding est une classe qui lie le framework Flutter
+  //à la plateforme sous-jacente. L'appel de ensureInitialized s'assure
+  //que cette liaison est en place
+  //avant que d'autres opérations ne soient effectuées.
+  //Cette méthode est souvent utilisée en début de programme,
+  //avant de faire appel à des fonctions asynchrones
+  //ou d'utiliser des packages qui nécessitent une initialisation préalable.
+  WidgetsFlutterBinding.ensureInitialized();
+  //utilisée pour initialiser les services Firebase
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
