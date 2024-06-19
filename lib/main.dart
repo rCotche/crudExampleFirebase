@@ -1,3 +1,4 @@
+import 'package:crud_example_firebase/firebase_options.dart';
 import 'package:crud_example_firebase/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ void main() async {
   //ou d'utiliser des packages qui nécessitent une initialisation préalable.
   WidgetsFlutterBinding.ensureInitialized();
   //utilisée pour initialiser les services Firebase
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
