@@ -172,6 +172,8 @@ class _EmployeeState extends State<Employee> {
                         backgroundColor: Colors.green,
                         textColor: Colors.white,
                         fontSize: 16.0);
+                    //
+                    Navigator.pop(context);
                   });
                 },
                 child: const Text(
